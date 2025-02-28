@@ -1,0 +1,238 @@
+---
+// CategoryFilter.astro
+const categories = [
+  'TODOS',
+  'ENTRADAS',
+  'DEL MAR',
+  'OSTIONES',
+  'ALMEJAS',
+  'TACOS Y TOSTADAS',
+  'PIZZAS',
+  'PASTAS',
+  'ENSALADAS',
+  'CORTES',
+  'GUARNICIONES',
+  'MENÚ KIDS'
+];
+const defaultCategory = 'ENTRADAS';
+---
+
+<div class="filter-container">
+  <button id="filter-toggle" class="filter-toggle">
+    <span id="selected-category" >Filtrar por categoría</span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </button>
+  
+  <div id="filter-options" class="filter-options">
+    {categories.map((category) => (
+       <button 
+        class={`filter-button ${category === defaultCategory ? 'active' : ''}`}
+        data-category={category === 'TODOS' ? '*' : category.toLowerCase().replace(/\s+/g, '-')}
+        data-name={category}
+        data-default={category === defaultCategory ? 'true' : 'false'}
+      >
+        {category}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+ function initFilters() {
+    const filterToggle = document.getElementById('filter-toggle');
+    const selectedCategorySpan = document.getElementById('selected-category');
+    const filterOptions = document.getElementById('filter-options');
+    const filterButtons = document.querySelectorAll('.filter-button');
+    const menuSections = document.querySelectorAll('.menu-section');
+    
+    if (!filterToggle || !filterOptions) return;
+    
+    // Toggle filter options on mobile
+    filterToggle.addEventListener('click', () => {
+      filterOptions.classList.toggle('show');
+    });
+    
+    // Filter functionality
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // Get selected category
+        const category = button.getAttribute('data-category') || '*';
+        const categoryName = button.getAttribute('data-name') || 'Filtrar por categoría';
+        
+        // Update the toggle button text
+        if (selectedCategorySpan) {
+          selectedCategorySpan.textContent = categoryName;
+        }
+        
+        // Show/hide sections based on selection
+        menuSections.forEach(section => {
+          if (category === '*') {
+            (section as HTMLElement).style.display = 'block';
+          } else {
+            (section as HTMLElement).style.display = section.id === category ? 'block' : 'none';
+          }
+        });
+        
+        // Close dropdown on mobile after selection
+        filterOptions.classList.remove('show');
+        
+        // Smooth scroll to first visible section
+        if (category !== '*') {
+          const targetSection = document.getElementById(category);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else {
+          // Si es "TODOS", desplázate hasta la parte superior de la sección de menú
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+    
+    // Inicializar con ENTRADAS seleccionado
+    const defaultButton = document.querySelector('.filter-button[data-default="true"]');
+    
+    if (defaultButton) {
+      // Activar el botón de ENTRADAS por defecto
+      defaultButton.classList.add('active');
+      
+      // Obtener categoría seleccionada
+      const category = defaultButton.getAttribute('data-category') || '*';
+      const categoryName = defaultButton.getAttribute('data-name') || 'Filtrar por categoría';
+      
+      // Actualizar texto del botón
+      if (selectedCategorySpan) {
+        selectedCategorySpan.textContent = categoryName;
+      }
+      
+      // Mostrar/ocultar secciones según la selección
+      menuSections.forEach(section => {
+        if (category === '*') {
+          (section as HTMLElement).style.display = 'block';
+        } else {
+          (section as HTMLElement).style.display = section.id === category ? 'block' : 'none';
+        }
+      });
+      
+      // Desplazarse a la sección ENTRADAS
+      const targetSection = document.getElementById(category);
+      if (targetSection) {
+        setTimeout(() => {
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+    
+    // Close filter options when clicking outside
+    document.addEventListener('click', (event) => {
+      // Corregir el problema de tipos con casting explícito
+      const target = event.target as Node;
+      
+      if (filterOptions.classList.contains('show') && 
+          filterToggle && 
+          !filterToggle.contains(target) && 
+          !filterOptions.contains(target)) {
+        filterOptions.classList.remove('show');
+      }
+    });
+  }
+
+  // Ejecutar en diferentes eventos
+  initFilters();
+  document.addEventListener('DOMContentLoaded', initFilters);
+  
+  // Soporte para navegación de Astro
+  document.addEventListener('astro:page-load', initFilters);
+</script>
+
+<style>
+  .filter-container {
+    position: sticky;
+    top: 12px;
+    background-color: var(--color-primary);
+    padding: 1rem 0;
+    z-index: 100;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-radius: 12px;
+  }
+  
+  .filter-toggle {
+    display: none;
+    width: 100%;
+    background-color: var(--color-accent);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+  
+  .filter-button {
+    background-color: transparent;
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  .filter-button:hover, .filter-button.active {
+    background-color: var(--color-accent);
+    color: white;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .filter-toggle {
+      display: flex;
+      
+    }
+    
+    .filter-options {
+      display: none;
+      flex-direction: column;
+      padding: 1rem;
+      background-color: var(--color-primary);
+      border-radius: 0 0 10px 10px;
+      /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); */
+      margin-top: 0.5rem;
+    }
+    
+    .filter-options.show {
+      display: flex;
+    }
+    
+    .filter-button {
+      width: 100%;
+      text-align: left;
+      border-radius: 5px;
+    }
+  }
+</style>

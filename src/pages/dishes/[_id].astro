@@ -1,0 +1,205 @@
+---
+import { dishes } from '../../data/dishes';
+import type { Dish } from '../../interface/dish';
+import Layout from '../../layouts/Layout.astro';
+import vaca from '/src/assets/vaca.webp';
+import vaca1 from '/src/assets/vaca1.webp';
+import vaca2 from '/src/assets/vaca2.webp';
+import vaca3 from '/src/assets/vaca3.webp';
+import vaca4 from '/src/assets/vaca4.webp';
+import vaca5 from '/src/assets/vaca5.webp';
+import vaca6 from '/src/assets/vaca6.webp';
+import vaca7 from '/src/assets/vaca7.webp';
+import vaca8 from '/src/assets/vaca8.webp';
+import vaca9 from '/src/assets/vaca9.webp';
+
+interface Props {
+  dish: Dish;
+  imageUrl: string;
+}
+
+// Crea el array de URLs de imágenes ANTES de getStaticPaths
+const imageUrls = [vaca, vaca1, vaca2, vaca3, vaca4, vaca5, vaca6, vaca7, vaca8, vaca9]
+  .map(image => image.src);
+export async function getStaticPaths() {
+  return dishes.map((dish, index) => ({
+    params: { _id: index.toString() },
+    props: {
+      dish,
+      
+    }
+  }));
+}
+
+
+
+
+const { dish, imageUrl } = Astro.props;
+const { _id } = Astro.params
+const getImage = (index:number) => imageUrls[index % imageUrls.length];
+console.log(dish, Number(_id))
+---
+<Layout>
+  <main class="dish-container">
+  <img 
+  src={getImage(Number(_id))}
+  alt={dish.name}
+    class="dish-image"
+    
+    loading="lazy"
+    transition:name={`img-${dish._id}`}
+  />
+  
+  <div class="dish-content">
+    <div class="dish-header">
+      <h1>{dish.name}</h1>
+      <div class="price">{dish.price.toFixed(2)} MXN</div>
+    </div>
+    
+    <div class="rating">
+      ★ {dish.rating}/5{dish.reviewsCount && ` (${dish.reviewsCount} reseñas)`}
+    </div>
+    
+    <p class="description">{dish.shortDescription}</p>
+    
+    <a href="/menu" class="back-button">← Volver al Menú</a>
+  </div>
+</main>
+</Layout>
+
+
+<style>
+:root {
+ 
+  --max-content-width: 1400px;
+    --image-max-height: 60vh;
+    --content-padding: clamp(1rem, 5vw, 4rem);
+}
+
+.dish-container {
+  display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: var(--content-padding);
+}
+
+.dish-image {
+  width: 100%;
+    height: clamp(300px, 50vh, 600px);
+    object-fit: cover;
+    border-radius: 20px 20px 0 0;
+    
+}
+
+.dish-content {
+  background: var(--color-primary);
+    padding: var(--content-padding);
+    border-radius: 0  0 20px 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.058);
+    position: relative;
+    z-index: 1;
+}
+
+.dish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+h1{
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-accent);
+}
+
+.price {
+  color: var(--color-accent);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.rating {
+  color: var(--color-text);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: var(--color-text);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 800px;
+}
+
+.back-button {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: transform 0.3s;
+}
+
+.back-button:hover {
+  transform: translateX(-5px);
+}
+
+@media (min-width: 1024px) {
+    .dish-container {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+      /* gap: 3rem; */
+      padding-top: 4rem;
+    }
+
+    .dish-image {
+      height: auto;
+      max-height: 80vh;
+      border-radius: 20px 0 0 20px;
+      margin-bottom: 0;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .dish-content {
+      padding: 3rem;
+      margin-top: 0;
+      box-shadow: none;
+      border-radius: 0 20px 20px 0;
+      height: 100%;
+     
+    }
+  }
+   /* Pantallas medianas (768px - 1023px) */
+   @media (min-width: 768px) and (max-width: 1023px) {
+    .dish-image {
+      height: 400px;
+    }
+  }
+
+  .dish-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .price {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .rating {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+  }
+
+  .description {
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.7;
+    max-width: 65ch;
+  }
+</style>

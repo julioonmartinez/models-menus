@@ -1,0 +1,101 @@
+---
+import logo from '/src/assets/logo.webp';
+---
+<nav class="toolbar backdrop-blur-xs" >
+    <div class="content-logo">
+        <img src={logo.src} width="80px" height="40px" alt="">
+        <div class="content-menu hidden lg:flex gap-4 ml-4 pl-4 border-l-3 border-l-[var(--text-color)]">
+          <a href="/menu" class="btn menu h-full cursor-pointer px-4 py-2" >Menú</a>
+          <a class="btn reservation cursor-pointer px-4 py-2" >Reservaciones</a>
+      </div>
+    </div>
+    <div class="nav-mobile flex gap-3 justify-center items-center">
+        <button class="p-2 text-2xl mr-5" >
+          <i class="fa-brands fa-instagram"></i>
+        </button>
+        <button class="p-2 text-2xl mr-5" >
+          <i class="fa-brands fa-whatsapp"></i>
+        </button>
+        <button class="text-2xl  lg:hidden " >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+       
+    </div>
+    
+</nav>
+
+<style>
+  :root {
+            --color-primary: #e8e1d5;
+            --color-secondary: #d8cfc0;
+            --color-accent: #a67c52;
+            --color-text: #3a3229;
+            --color-light: #f5f2ea;
+        }
+    .content-menu{
+      /* padding-left: 1rem;
+      border-left: 3px solid var(--color-text);
+      height: 100%;
+      margin-left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem; */
+    }
+    .toolbar{
+        display: flex;
+        /* align-items: center; */
+        justify-content: space-between;
+        padding: 0 1rem;
+        background-color: #e8e1d5d8;
+        padding:  0rem 2rem  ;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+    }
+    
+ 
+    .content-logo{
+        display: flex;
+        align-items: center;
+        padding: 0.85rem 0;
+        padding-right: 0.85rem;
+    }
+    .content-logo .text{
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    @media (min-width:560px) {
+      .content-logo .text{
+        font-size: 1.6rem;
+      }
+    }
+    .btn {
+        border-bottom: 4px solid transparent; /* Borde transparente que reserva espacio */
+        transition: border-bottom-color 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
+        color: var(--color-text);
+    }
+
+.btn:hover {
+  border-bottom-color: var(--color-text); /* Solo cambia el color */
+}
+
+
+/* .btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: #78350f;
+  transition: width 0.3s ease;
+}
+
+.btn:hover::after {
+  width: 100%;
+} */
+
+
+</style>

@@ -1,209 +1,534 @@
 ---
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
+import SectionMenu from "./SectionMenu.astro";
+import Toolbar from "./Toolbar.astro";
+import { Beef, Flame, Wine, ExternalLink } from 'lucide-static';
+import vaca from '/src/assets/vaca.webp';
 ---
+<Toolbar></Toolbar>
+<div class="hero bg-[url(/src/assets/vaca2.webp)] w-full bg-cover bg-center bg-no-repeat flex flex-col px-2 relative z-0" >
+  <div class="relative z-10 text-white px-8 pt-30 flex flex-col gap-4 max-w-3xl">
+    <!-- Tu contenido aquí -->
+    <h1 class="text-4xl lg:text-5xl font-bold">El arte del buen corte, servido en tu mesa"</h1>
+    <p class="text-2xl lg:text-3xl " >Cortes selectos, madurados a la perfección y asados con leña de roble</p>
+    <div class="content-actions flex flex-col gap-4 mt-5 lg:mt-10">
+        
+      <a href="/menu" class="btn btn-menu max-w-[320px] flex justify-between items-center rounded-xl text-1xl font-bold bg-[var(--color-accent)] px-4 py-4 cursor-pointer" >
+        Menú
+       <i class="fa-solid fa-arrow-right rotate-325"></i>
+    </a>
+      <a class="btn btn-menu max-w-[320px] flex justify-between items-center rounded-xl text-1xl font-bold bg-[var(--color-accent)] px-4 py-4 cursor-pointer" >
+        Reservaciones
+       <i class="fa-solid fa-arrow-right rotate-325"></i>
+    </a>
 
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-			<a href="https://astro.build"
-				><img src={astroLogo.src} width="115" height="48" alt="Astro Homepage" /></a
-			>
-			<h1>
-				To get started, open the <code><pre>src/pages</pre></code> directory in your project.
-			</h1>
-			<section id="links">
-				<a class="button" href="https://docs.astro.build">Read our docs</a>
-				<a href="https://astro.build/chat"
-					>Join our Discord <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"
-						><path
-							fill="currentColor"
-							d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"
-						></path></svg
-					>
-				</a>
-			</section>
-		</section>
-	</main>
-
-	<a href="https://astro.build/blog/astro-5/" id="news" class="box">
-		<svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"
-			><path
-				d="M24.667 12c1.333 1.414 2 3.192 2 5.334 0 4.62-4.934 5.7-7.334 12C18.444 28.567 18 27.456 18 26c0-4.642 6.667-7.053 6.667-14Zm-5.334-5.333c1.6 1.65 2.4 3.43 2.4 5.333 0 6.602-8.06 7.59-6.4 17.334C13.111 27.787 12 25.564 12 22.666c0-4.434 7.333-8 7.333-16Zm-6-5.333C15.111 3.555 16 5.556 16 7.333c0 8.333-11.333 10.962-5.333 22-3.488-.774-6-4-6-8 0-8.667 8.666-10 8.666-20Z"
-				fill="#111827"></path></svg
-		>
-		<h2>What's New in Astro 5.0?</h2>
-		<p>
-			From content layers to server islands, click to learn more about the new features and
-			improvements in Astro 5.0
-		</p>
-	</a>
+    </div>
+  </div>
 </div>
+<section id="menu">
+    <div class="container">
+        <div class="section-title">
+            <h2>Nuestro Menú</h2>
+        </div>
+        <SectionMenu></SectionMenu>
+    </div>
+  </section>
+<section class="about" id="nosotros">
+  <div class="container">
+      <div class="section-title">
+          <h2>Nuestra Historia</h2>
+      </div>
+      <div class="about-content">
+          <div class="about-text">
+              <p>La Vaca Tuerta nació en 2010 como un pequeño restaurante familiar con una gran visión: ofrecer la mejor experiencia gastronómica con productos locales de la más alta calidad.</p>
+              <p>Nuestra filosofía se basa en respetar el producto, potenciar sus sabores naturales y presentarlo de manera creativa pero sin artificios innecesarios.</p>
+              <p>Hoy, La Vaca Tuerta es reconocido como uno de los mejores restaurantes de la región, manteniendo siempre nuestra esencia y compromiso con la excelencia.</p>
+              <a href="#menu" class="btn">Ver Nuestro Menú</a>
+          </div>
+          <div class="about-img">
+              <img src={vaca.src} alt="Interior del restaurante La Vaca Tuerta">
+          </div>
+      </div>
+  </div>
+</section>
 
+<section class="reservation" id="reservas">
+  <div class="container">
+      <div class="section-title">
+          <h2>Reserva Tu Mesa</h2>
+      </div>
+      <div class="reservation-form">
+          <form action="#" method="post">
+              <div class="form-group">
+                  <label for="name">Nombre Completo</label>
+                  <input type="text" id="name" class="form-control" required>
+              </div>
+              <div class="form-group">
+                  <label for="email">Correo Electrónico</label>
+                  <input type="email" id="email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                  <label for="phone">Teléfono</label>
+                  <input type="tel" id="phone" class="form-control" required>
+              </div>
+              <div class="form-group">
+                  <label for="date">Fecha</label>
+                  <input type="date" id="date" class="form-control" required>
+              </div>
+              <div class="form-group">
+                  <label for="time">Hora</label>
+                  <input type="time" id="time" class="form-control" required>
+              </div>
+              <div class="form-group">
+                  <label for="guests">Número de Personas</label>
+                  <input type="number" id="guests" min="1" max="12" class="form-control" required>
+              </div>
+              <div class="form-group">
+                  <label for="message">Mensaje (Opcional)</label>
+                  <textarea id="message" class="form-control" rows="4"></textarea>
+              </div>
+              <button type="submit" class="btn">Confirmar Reserva</button>
+          </form>
+      </div>
+  </div>
+</section>
+
+<section id="galeria">
+  <div class="container">
+      <div class="section-title">
+          <h2>Galería</h2>
+      </div>
+      <div class="gallery">
+          <div class="gallery-item">
+              <img src="/src/assets/vaca.webp" alt="Restaurante La Vaca Tuerta">
+          </div>
+          <div class="gallery-item">
+              <img src="/src/assets/vaca2.webp" alt="Restaurante La Vaca Tuerta">
+          </div>
+          <div class="gallery-item">
+              <img src="/src/assets/vaca3.webp" alt="Restaurante La Vaca Tuerta">
+          </div>
+          <div class="gallery-item">
+              <img src="/src/assets/vaca4.webp" alt="Restaurante La Vaca Tuerta">
+          </div>
+          <div class="gallery-item">
+              <img src="/src/assets/vaca6.webp" alt="Restaurante La Vaca Tuerta">
+          </div>
+          <div class="gallery-item">
+              <img src="/src/assets/vaca.webp" alt="Restaurante La Vaca Tuerta">
+          </div>
+      </div>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="container">
+      <div class="section-title">
+          <h2>Contacto</h2>
+      </div>
+      <div class="contact-grid">
+          <div class="contact-info">
+              <div class="contact-card">
+                  <i>📍</i>
+                  <div>
+                      <h4>Dirección</h4>
+                      <p>Av. Principal 123, Ciudad</p>
+                  </div>
+              </div>
+              <div class="contact-card">
+                  <i>📞</i>
+                  <div>
+                      <h4>Teléfono</h4>
+                      <p>+34 123 456 789</p>
+                  </div>
+              </div>
+              <div class="contact-card">
+                  <i>📧</i>
+                  <div>
+                      <h4>Correo</h4>
+                      <p>info@lavacatuerta.com</p>
+                  </div>
+              </div>
+              <div class="contact-card">
+                  <i>🕒</i>
+                  <div>
+                      <h4>Horario</h4>
+                      <p>Lunes - Domingo: 12:00 - 23:00</p>
+                  </div>
+              </div>
+          </div>
+          <div class="map">
+              <div style="background-color: #ddd; height: 300px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                  <p>Mapa del Restaurante</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+      <div class="footer-container">
+          <div class="footer-col">
+              <h3>La Vaca Tuerta</h3>
+              <p>Donde cada plato cuenta una historia y cada visita se convierte en un recuerdo inolvidable.</p>
+              <div class="social-icons">
+                  <a href="#"><span>FB</span></a>
+                  <a href="#"><span>IG</span></a>
+                  <a href="#"><span>TW</span></a>
+              </div>
+          </div>
+          <div class="footer-col">
+              <h3>Enlaces Rápidos</h3>
+              <ul>
+                  <li><a href="#menu">Menú</a></li>
+                  <li><a href="#reservas">Reservas</a></li>
+                  <li><a href="#galeria">Galería</a></li>
+                  <li><a href="#contacto">Contacto</a></li>
+              </ul>
+          </div>
+          <div class="footer-col">
+              <h3>Horario</h3>
+              <ul>
+                  <li>Lunes - Jueves: 12:00 - 22:00</li>
+                  <li>Viernes - Sábado: 12:00 - 23:00</li>
+                  <li>Domingo: 12:00 - 21:00</li>
+              </ul>
+          </div>
+      </div>
+      <div class="copyright">
+          <p>&copy; 2025 La Vaca Tuerta. Todos los derechos reservados.</p>
+      </div>
+  </div>
+</footer>
 <style>
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
+  
+  .hero{
+   min-height: calc(100vh - 76px);
+   
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad (0.5 = 50% oscuro) */
+    z-index: 1;
+  }
+  .btn{
+    /* background-color: var(--color); */
+    transition: transform 0.3s ease-in-out;
+}
+  .btn:hover{
+    transform: scale(1.01);
+  }
 
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
+  section {
+            padding: 5rem 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--color-text);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-accent);
+        }
+        
+        .about {
+            background-color: var(--color-primary);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-img {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
 
-	main {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-	}
-
-	#hero {
-		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
-		padding: 16px;
-	}
-
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
-
-	#links {
-		display: flex;
-		gap: 16px;
-	}
-
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
-
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
-
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
-
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
-
-	pre {
-		font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
-			'DejaVu Sans Mono', monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
-
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
-
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
-
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
-
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
-
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
-
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
-
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
-
-		#links {
-			flex-wrap: wrap;
-		}
-
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
+        .reservation {
+            background-color: var(--color-secondary);
+            text-align: center;
+        }
+        
+        .reservation-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: var(--color-light);
+            border-radius: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .contact {
+            background-color: var(--color-primary);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--color-light);
+            border-radius: 8px;
+        }
+        
+        .contact-card i {
+            font-size: 1.5rem;
+            color: var(--color-accent);
+        }
+        
+        footer {
+            background-color: var(--color-text);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--color-accent);
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-col ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: var(--color-accent);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-icons a {
+            color: white;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--color-accent);
+        }
+        
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+        }
+        
+        @media (max-width: 991px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem;
+            }
+            
+            .nav-container {
+                position: relative;
+            }
+            
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-primary);
+                height: 0;
+                overflow: hidden;
+                transition: height 0.3s;
+            }
+            
+            nav.active {
+                height: auto;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul li {
+                margin: 0;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero {
+                height: 60vh;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                height: 50vh;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.2rem;
+            }
+            
+            section {
+                padding: 3rem 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
 </style>
