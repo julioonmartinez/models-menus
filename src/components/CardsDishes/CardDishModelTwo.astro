@@ -1,0 +1,51 @@
+---
+import type { Dish } from '../../interface/dish'
+import Rating from '../MicroComponents/Rating.astro'
+
+interface Props {
+    dish: Dish,
+}
+
+const { dish} = Astro.props;
+// const getImage = (index:number) => images[index % images.length];
+
+---
+
+<div class="grid grid-rows-2 card-content menu-item rounded-xl bg-[var(--color-primary)] overflow-hidden">
+  <div transition:name={`img-${dish._id}`} class="image h-40 w-full bg-cover bg-center bg-no-repeat relative" 
+       style={{ backgroundImage: `url(${dish.urlImg})` }}>
+    <div class="content-rating absolute top-2 right-2">
+      <Rating rating={3}></Rating>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#000000] to-transparent text-white">
+      <h3 class="text-xl font-bold">{dish.name}</h3>
+    </div>
+  </div>
+  <div class="p-4 flex flex-col h-full justify-between">
+    <p class="text-[var(--color-text)]">{dish.shortDescription}</p>
+    <div class="flex justify-between items-center">
+      <span class="font-bold text-2xl text-[var(--color-accent)]">${dish.price}</span>
+      <a href={`/dishes/${dish._id}`} class="px-8 py-2 rounded-full transition-colors bg-[var(--color-accent)] text-[var(--color-primary)]">
+        Ver
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu-item {
+    opacity: 0;
+    scale: 80%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease, scale 0.5s ease;
+  }
+  
+  .menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .menu-item.visible {
+    opacity: 1;
+    scale: 100%;
+  }
+</style>

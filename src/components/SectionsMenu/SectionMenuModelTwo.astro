@@ -1,0 +1,30 @@
+---
+import CategoryFilterModelTwo from "../CategoriesFilters/CategoryFilterModelTwo.astro";
+import MenuSection from "./MenuSection.astro";
+
+const SECTION_ORDER = [
+  'ENTRADAS',
+  'DEL MAR',
+  'OSTIONES',
+  'ALMEJAS',
+  'TACOS Y TOSTADAS',
+  'PIZZAS',
+  'PASTAS',
+  'ENSALADAS',
+  'CORTES',
+  'GUARNICIONES',
+  'MENÚ KIDS'
+];
+
+const defaultCategory = 'ENTRADAS';
+---
+
+<CategoryFilterModelTwo />
+
+{SECTION_ORDER.map((category) => (
+  <MenuSection 
+    
+    category={category} 
+    initiallyVisible={category === defaultCategory} 
+  />
+))}

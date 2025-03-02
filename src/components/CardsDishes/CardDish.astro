@@ -1,0 +1,107 @@
+---
+import type { Dish } from '../../interface/dish'
+import {DEMOIMAGES} from '../../data/demoImages'
+
+interface Props {
+  dish:Dish,
+  index:number,
+  
+}
+
+const images = DEMOIMAGES;
+
+const { dish } = Astro.props
+
+---
+<a 
+href={`/dishes/${dish._id}`} 
+class="menu-item"
+style="text-decoration: none; color: inherit;"
+>
+<div class="menu-item-img">
+  <img 
+    src={dish.urlImg}
+    alt={dish.name}
+    transition:name={`ìmg-${dish._id}`}
+    loading="lazy"
+  />
+</div>
+<div class="menu-item-content">
+  <h3>{dish.name}</h3>
+  <p>{dish.shortDescription}</p>
+  <div class="content-price">
+    <div class="price">${dish.price.toFixed(2)}</div>
+    {dish.reviewsCount && (
+      <div class="rating">
+        ★ {dish.rating} ({dish.reviewsCount} reseñas)
+      </div>
+    )}
+  </div>
+</div>
+</a>
+
+<style>
+  .menu-item {
+    background-color: var(--color-primary);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s;
+}
+   /* Aplicamos la animación solo a los elementos con la clase "animate-on-scroll" */
+   
+        
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .menu-item-img {
+            height: 140px;
+            overflow: hidden;
+        }
+        
+        .menu-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .menu-item:hover .menu-item-img img {
+            transform: scale(1.1);
+        }
+        
+        .menu-item-content {
+            padding: 1rem;
+        }
+        
+        .menu-item-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--color-text);
+        }
+        
+        .menu-item-content p {
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .content-price{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .rating {
+    color: #666;
+    font-size: 0.9rem;
+    /* margin-top: 0.5rem; */
+  }
+        
+        .price {
+            color: var(--color-accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        
+</style>

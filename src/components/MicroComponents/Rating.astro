@@ -1,0 +1,17 @@
+---
+// Rating.astro
+const { rating } = Astro.props;
+const maxRating = 5; // Máximo de estrellas (puedes ajustarlo)
+
+---
+
+<div class="flex items-center gap-1">
+  {
+    Array.from({ length: maxRating }, (_, index) => (
+      <span  class={`text-[20px] ${(index ) < rating ? 'text-yellow-400' : 'text-gray-300'} cursor-pointer `}>
+        <i class="fa-solid fa-star"></i>
+      </span>
+    ))
+  }
+  
+</div>

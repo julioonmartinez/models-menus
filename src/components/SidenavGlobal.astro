@@ -1,0 +1,156 @@
+---
+// SidenavGlobal.astro
+---
+<div id="sidenav-overlay" class="sidenav-overlay"></div>
+<aside id="sidenav" class="sidenav">
+  <nav>
+    <ul class="flex flex-col gap-1">
+      <li>
+        <a href="/menu" class="sidenav-link flex justify-between w-full">
+          <span>Menú</span>
+          <i class="fa-solid fa-utensils"></i>
+        </a>
+      </li>
+      <li>
+        <a href="/#reservas" class="sidenav-link flex justify-between w-full">
+          Reservaciones
+          <i class="fa-solid fa-arrow-right rotate-325"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<style>
+  /* Overlay: máscara oscura con efecto blur */
+  .sidenav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .sidenav-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Sidenav: panel lateral derecho */
+  .sidenav {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100%;
+    background-color: var(--color-primary);
+    z-index: 999;
+    transition: right 0.3s ease;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidenav.open {
+    right: 0;
+  }
+  
+  .sidenav nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidenav-link {
+    margin: 1rem 0;
+    padding: 1rem 1.5rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease, background 0.3s ease;
+    border-radius: 5px;
+  }
+  .sidenav-link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-accent);
+  }
+  
+  /* Clase para evitar scroll en el body */
+  /* .no-scroll {
+    overflow: hidden;
+  } */
+</style>
+
+<script>
+  function setupSidenav() {
+    const sidenav = document.getElementById('sidenav');
+    const overlay = document.getElementById('sidenav-overlay');
+    if (!sidenav || !overlay) return;
+    
+    // Limpiamos primero los listeners anteriores si existieran
+    const newSidenav = sidenav.cloneNode(true);
+    const newOverlay = overlay.cloneNode(true);
+    if (sidenav.parentNode) sidenav.parentNode.replaceChild(newSidenav, sidenav);
+    if (overlay.parentNode) overlay.parentNode.replaceChild(newOverlay, overlay);
+    
+    function openSidenav() {
+      newSidenav.classList.add('open');
+      newOverlay.classList.add('visible');
+      document.body.classList.add('no-scroll');
+    }
+    
+    function closeSidenav() {
+      newSidenav.classList.remove('open');
+      newOverlay.classList.remove('visible');
+      document.body.classList.remove('no-scroll');
+    }
+    
+    // Registrar eventos
+    const openSidenavEvent = new CustomEvent('open-sidenav');
+    document.addEventListener('open-sidenav', openSidenav);
+    
+    newOverlay.addEventListener('click', closeSidenav);
+    
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (newSidenav.classList.contains('open') && 
+          !newSidenav.contains(target) && 
+          !target.closest('#sidenav-toggle')) {
+        closeSidenav();
+      }
+    });
+    
+    const sidenavLinks = newSidenav.querySelectorAll('.sidenav-link');
+    sidenavLinks.forEach(link => {
+      link.addEventListener('click', closeSidenav);
+    });
+    
+    // Crear un botón global que dispare el evento
+    document.querySelectorAll('#sidenav-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        document.dispatchEvent(openSidenavEvent);
+      });
+    });
+  }
+
+  // Inicializar en carga inicial
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupSidenav);
+  } else {
+    setupSidenav();
+  }
+
+  // Reinicializar después de cada navegación
+  document.addEventListener('astro:page-load', setupSidenav);
+
+  // También podemos escuchar cuando comienza la navegación para limpiar
+  document.addEventListener('astro:before-preparation', () => {
+    document.querySelectorAll('#sidenav, #sidenav-overlay').forEach(el => {
+      el.classList.remove('open');
+      el.classList.remove('visible');
+    });
+  });
+</script>

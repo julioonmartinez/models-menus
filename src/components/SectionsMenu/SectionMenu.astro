@@ -1,0 +1,108 @@
+---
+//componentes/SectionMenu.astro
+import { dishes } from '../../data/dishes';
+
+import { DISHES_GROUPED } from '../../data/dishes';
+
+import CardDish from '../CardsDishes/CardDish.astro';
+import CategoryFilterModelTwo from '../CategoriesFilters/CategoryFilterModelTwo.astro';
+
+
+
+const SECTION_ORDER = [
+  'ENTRADAS',
+  'DEL MAR',
+  'OSTIONES',
+  'ALMEJAS',
+  'TACOS Y TOSTADAS',
+  'PIZZAS',
+  'PASTAS',
+  'ENSALADAS',
+  'CORTES',
+  'GUARNICIONES',
+  'MENÚ KIDS'
+];
+
+---
+<CategoryFilterModelTwo transition:persist />
+{SECTION_ORDER.map((category) => (
+    DISHES_GROUPED[category]?.length && (
+      <section  class="menu-section" id={category.toLowerCase().replace(/\s+/g, '-')}>
+        <h2 class="section-title">{category}</h2>
+        <div class="menu-grid">
+          {DISHES_GROUPED[category].map((dish, index) => (
+ <CardDish dish={dish} index={index}  ></CardDish>
+))}
+        </div>
+      </section>
+    )
+  ))}
+  <script>
+    
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const menuItems = document.querySelectorAll('.menu-item');
+    //     console.log(menuItems)
+        
+    //     menuItems.forEach((item) => {
+    //         const rect = item.getBoundingClientRect();
+    //         const isVisible = (
+    //             rect.top >= 0 &&
+    //             rect.left >= 0 &&
+    //             rect.bottom <= window.innerHeight &&
+    //             rect.right <= window.innerWidth
+    //         );
+            
+    //         if (!isVisible) {
+    //             item.classList.add('animate-on-scroll');
+    //         } else {
+    //             // Solución con tipado correcto
+    //             (item as HTMLElement).style.opacity = '1';
+    //             (item as HTMLElement).style.scale = '100%';
+                
+
+    //           }
+    //     });
+    // });
+</script>
+  <style>
+   
+    .menu-section {
+    margin: 1.6rem 0;
+    padding: 2rem 0;
+    /* padding-top: 5rem; */
+    border-top: 2px solid var(--color-accent);
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+    color: var(--color-accent);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+    .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+        
+        
+        .menu-item.animate-on-scroll {
+      view-timeline-name: --reveal;
+      animation-name: show;
+      animation-fill-mode: both;
+      animation-timeline: --reveal;
+  }
+  @keyframes show {
+          from {
+            opacity: 1; scale: 80%;
+          }
+          to {
+            opacity: 1; scale: 100%;
+          }
+        }
+    
+  </style>

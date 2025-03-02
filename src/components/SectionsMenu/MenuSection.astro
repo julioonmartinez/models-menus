@@ -1,0 +1,130 @@
+---
+import { dishes } from '../../data/dishes';
+import CardDishModelTwo from "../CardsDishes/CardDishModelTwo.astro";
+
+interface Props {
+  category: string;
+  initiallyVisible: boolean;
+}
+
+const { category, initiallyVisible = false } = Astro.props;
+
+// Filtrar platos por categoría
+const filteredDishes = dishes.filter(dish => 
+  dish.category === category
+).map(dish => ({
+  ...dish,
+  // _id: dish._id || crypto.randomUUID()
+}));
+
+const categoryId = category.toLowerCase().replace(/\s+/g, '-');
+---
+
+<section 
+  class="menu-section" 
+  id={categoryId} 
+  data-category={category}
+  style={initiallyVisible ? "" : "display: none;"}
+>
+  <h2 class="section-title">{category}</h2>
+  <div class="menu-grid">
+    {filteredDishes.map((dish, index) => (
+      <CardDishModelTwo dish={dish}  />
+    ))}
+  </div>
+</section>
+
+<script define:vars={{ categoryId, category }}>
+ 
+
+  function handleCategoryChange(event) {
+    const section = document.getElementById(categoryId);
+    if (!section) return;
+    
+    const selectedCategory = event.detail.category;
+    
+    if (selectedCategory === '*' || selectedCategory === categoryId) {
+      section.style.display = 'block';
+      
+      animateItems(section);
+    } else {
+      section.style.display = 'none';
+    }
+  }
+  function resetAnimation(section) {
+    const menuItems = section.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+      item.classList.remove('visible');
+      // Forzar un reflow para que el navegador procese los cambios
+      // void item.offsetWidth;
+    });
+  }
+  
+  function animateItems(section) {
+    resetAnimation(section)
+    const menuItems = section.querySelectorAll('.menu-item');
+    menuItems.forEach((item, index) => {
+      // Aplicar un retraso escalonado para crear un efecto de cascada
+      setTimeout(() => {
+        item.classList.add('visible');
+      }, index * 50); // 50ms de retraso entre cada elemento
+    });
+  }
+    // Función para inicializar las animaciones
+    function initializeAnimations() {
+    const section = document.getElementById(categoryId);
+    if (section && section.style.display !== 'none') {
+      animateItems(section);
+    }
+  }
+  
+  // Inicializa los elementos si la sección está visible inicialmente
+  // if (document.getElementById(categoryId).style.display !== 'none') {
+  //   setTimeout(() => {
+  //     animateItems(document.getElementById(categoryId));
+  //   }, 100);
+  // }
+  
+  // Escuchar el evento de cambio de categoría
+  window.addEventListener('categoryChanged', handleCategoryChange);
+
+  // Inicializar animaciones al cargar la página
+  document.addEventListener('astro:page-load', initializeAnimations);
+  
+  // Limpiar listener y timeout cuando se desmonta
+  // document.addEventListener('astro:before-swap', () => {
+  //   window.removeEventListener('categoryChanged', handleCategoryChange);
+   
+  // });
+
+  document.addEventListener('astro:page-load',()=>{
+    handleCategoryChange
+  } )
+  // Inicializar animaciones al cargar la página por primera vez
+  // initializeAnimations();
+</script>
+
+<style>
+  .menu-section {
+    margin: 1.6rem 0;
+    padding: 2rem 0;
+    border-top: 2px solid var(--color-accent);
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+    color: var(--color-accent);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+  
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+</style>
