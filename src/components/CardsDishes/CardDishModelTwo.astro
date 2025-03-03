@@ -7,15 +7,15 @@ interface Props {
 }
 
 const { dish} = Astro.props;
-// const getImage = (index:number) => images[index % images.length];
-
+// Usar la valoración del dish como predeterminada (o 0 si no existe)
+const defaultRating = dish.rating || 0;
 ---
 
 <div class="grid grid-rows-2 card-content menu-item rounded-xl bg-[var(--color-primary)] overflow-hidden">
   <div transition:name={`img-${dish._id}`} class="image h-40 w-full bg-cover bg-center bg-no-repeat relative" 
        style={{ backgroundImage: `url(${dish.urlImg})` }}>
     <div class="content-rating absolute top-2 right-2">
-      <Rating rating={3}></Rating>
+      <Rating rating={defaultRating} id={dish._id} />
     </div>
     <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#000000] to-transparent text-white">
       <h3 class="text-xl font-bold">{dish.name}</h3>

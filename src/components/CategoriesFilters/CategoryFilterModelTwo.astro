@@ -32,48 +32,44 @@ const defaultCategory = 'ENTRADAS';
 </div>
 
 <script>
- function initFilters() {
+function initFilters() {
     const filterButtons = document.querySelectorAll('.filter-button');
-    const filterOptions = document.getElementById('filter-options');
+    if (!filterButtons.length) return;
     
-    if (!filterOptions) return;
-    
-    // Filter functionality
+    // Agregar evento click a todos los botones de filtro
     filterButtons.forEach(button => {
-      button.addEventListener('click', async () => {
-        // Remove active class from all buttons
-        console.log('click')
+      button.addEventListener('click', () => {
+        // Quitar clase active de todos los botones
         filterButtons.forEach(btn => btn.classList.remove('active'));
         
-        // Add active class to clicked button
+        // Agregar clase active al botón clickeado
         button.classList.add('active');
         
-        // Get selected category
+        // Obtener categoría seleccionada
         const category = button.getAttribute('data-category') || '*';
         
-        // Dispatch custom event for menu sections to listen to
+        // Emitir evento personalizado para que las secciones lo escuchen
         window.dispatchEvent(new CustomEvent('categoryChanged', {
           detail: {
             category: category
           }
         }));
-        
-        // Smooth scroll to top
-        // window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
     
-    // Initialize with default category
-    // const defaultButton = document.querySelector('.filter-button[data-default="true"]');
-    // if (defaultButton) {
-    //   defaultButton.click();
-    // }
+    // Verificar si hay un botón por defecto y simularlo si no se ha hecho click aún
+    if (!document.querySelector('.filter-button.active')) {
+      const defaultButton = document.querySelector('.filter-button[data-default="true"]') as HTMLButtonElement ;
+      if (defaultButton) {
+        defaultButton.click();
+      }
+    }
   }
 
-  // Run on different events
+  // Inicializar filtros cuando el DOM está listo
   document.addEventListener('DOMContentLoaded', initFilters);
   
-  // Support for Astro navigation
+  // Inicializar filtros después de navegación de Astro
   document.addEventListener('astro:page-load', initFilters);
 </script>
 

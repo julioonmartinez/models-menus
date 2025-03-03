@@ -23,7 +23,7 @@ const defaultCategory = 'ENTRADAS';
 
 {SECTION_ORDER.map((category) => (
   <MenuSection 
-    
+    transition:persist
     category={category} 
     initiallyVisible={category === defaultCategory} 
   />
