@@ -7,4 +7,6 @@ export interface Dish {
     reviewsCount?:number,
     category:string,
     urlImg?: string,
+    userRating?: number,
+    userFav?: boolean,
 }

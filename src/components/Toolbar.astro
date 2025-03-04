@@ -9,7 +9,9 @@ const  {sticky}    = Astro.props as Props
 ---
 <header class="toolbar backdrop-blur-xs" class:list={sticky ? 'sticky' : ''} >
     <div class="content-logo">
-        <img src={logo.src} width="80px" height="40px" alt="logo">
+        <a href="/">
+          <img src={logo.src} width="80px" height="40px" alt="logo">
+        </a>
         <div class="content-menu hidden lg:flex gap-4 ml-4 pl-4 border-l-3 border-l-[var(--color-accent)]">
           <a href="/menu" class="btn menu h-full cursor-pointer px-4 py-2" >Menú</a>
           <a href="/#reservas" class="btn reservation cursor-pointer px-4 py-2" >Reservaciones</a>

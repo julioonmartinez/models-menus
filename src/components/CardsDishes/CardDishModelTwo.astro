@@ -1,6 +1,7 @@
 ---
 import type { Dish } from '../../interface/dish'
 import Rating from '../MicroComponents/Rating.astro'
+import Saved from '../MicroComponents/Saved.astro';
 
 interface Props {
     dish: Dish,
@@ -17,8 +18,9 @@ const defaultRating = dish.rating || 0;
     <div class="content-rating absolute top-2 right-2">
       <Rating rating={defaultRating} id={dish._id} />
     </div>
-    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#000000] to-transparent text-white">
+    <div  data-id={dish._id} class="container-save absolute  flex justify-between items-center bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#000000] to-transparent text-white">
       <h3 class="text-xl font-bold">{dish.name}</h3>
+      <Saved id={dish._id} title={dish.name} ></Saved>
     </div>
   </div>
   <div class="p-4 flex flex-col h-full justify-between">

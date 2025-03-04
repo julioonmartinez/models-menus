@@ -18,45 +18,62 @@ const maxRating = 5; // Máximo de estrellas
 </div>
 
 <script>
+  // Definir frases según calificación
+  const newRatingMessages = {
+  1: "😞 ¡Gracias por tu valoración! Tomaremos nota para sorprenderte en tu próxima visita.",
+  2: "😕 ¡Gracias por tu opinión! Trabajaremos duro para mejorar tu experiencia.",
+  3: "😐 ¡Gracias por tu feedback! Estamos en constante mejora, ¡lo mejor está por venir!",
+  4: "😊 ¡Qué bueno! Gracias por valorarnos, nos alegra que hayas disfrutado.",
+  5: "🤩 ¡Increíble! Tu 5 estrellas nos llena de energía. ¡Prepárate para lo próximo!"
+};
+
+const changedRatingMessages = {
+  1: "😔 Has cambiado de opinión. ¡Prometemos esforzarnos aún más para sorprenderte!",
+  2: "😕 Tu nueva valoración nos motiva a seguir mejorando. ¡Gracias por tu sinceridad!",
+  3: "😐 Gracias por actualizar tu valoración. ¡Tu opinión es vital para nosotros!",
+  4: "😊 ¡Fantástico! Has mejorado tu valoración. ¡Estamos encantados de ver tu evolución!",
+  5: "🤩 ¡Wow! Ahora eres de 5 estrellas. ¡Eres un auténtico experto en buen gusto!"
+};
+
 
   interface dishRating {
     id: string,
-    rating:number,
+    rating: number,
   }
-  document.addEventListener('astro:page-load', () => {
-    // Configurar delegación de eventos una sola vez
-    if (!window.ratingEventInitialized) {
-      document.addEventListener('click', handleRatingClick);
-      window.ratingEventInitialized = true;
-    }
-    
-    // Inicializar todas las valoraciones visibles
-    initializeRatings();
-  });
 
-  function handleRatingClick(event) {
-    // Encuentra la estrella clickeada o termina si no es una estrella
-    const starElement = event.target.closest('.star-rating');
-    if (!starElement) return;
-    
-    // Encuentra el contenedor de valoración
-    const container = starElement.closest('.rating-container');
-    if (!container) return;
-    
-    // Obtiene el ID del platillo y el valor de la valoración
-    const dishId = container.dataset.dishId;
-    const ratingValue = parseInt(starElement.dataset.rating);
-    
-    if (!dishId || !ratingValue) return;
-    
-    // Actualiza visualmente las estrellas
-    updateStars(container, ratingValue);
-    
-    // Guardar en localStorage para persistencia
-    saveRating(dishId, ratingValue);
-    
-    console.log(`Platillo ${dishId} calificado con ${ratingValue} estrellas`);
+  document.addEventListener('astro:page-load', () => {
+  if (!window.ratingEventInitialized) {
+    document.addEventListener('click', handleRatingClick);
+    window.ratingEventInitialized = true;
   }
+
+  // Solo ejecutar si hay estrellas en la página
+  if (document.querySelector('.rating-container')) {
+    initializeRatings();
+  }
+});
+
+
+function handleRatingClick(event) {
+  const starElement = event.target.closest('.star-rating');
+  if (!starElement) return;
+
+  const container = starElement.closest('.rating-container');
+  if (!container) return;
+
+  const dishId = container.dataset.dishId;
+  const ratingValue = parseInt(starElement.dataset.rating);
+  if (!dishId || !ratingValue) return;
+
+  // Verificar si el usuario hizo clic en la misma calificación
+  const currentRating = parseInt(container.dataset.currentRating) || 0;
+  if (currentRating === ratingValue) return; // Evitar trabajo innecesario
+
+  container.dataset.currentRating = ratingValue; // Guardar nuevo rating
+  updateStars(container, ratingValue);
+  saveRating(dishId, ratingValue);
+}
+
 
   function updateStars(container, rating) {
     const stars = container.querySelectorAll('.star-rating');
@@ -71,16 +88,26 @@ const maxRating = 5; // Máximo de estrellas
     });
   }
 
-  function saveRating(dishId:string, rating:number) {
+  function saveRating(dishId: string, rating: number) {
     try {
-      const savedRatings : dishRating[] = JSON.parse(localStorage.getItem('dishRatingsList') || '[]');
-      const dishIndex = savedRatings.findIndex(dish=> dish.id === dishId)
-      if(dishIndex != -1){
-        savedRatings[dishIndex].rating = rating
-      }else{
-        savedRatings.push({id:dishId, rating:rating})
+      const savedRatings: dishRating[] = JSON.parse(localStorage.getItem('dishRatingsList') || '[]');
+      const dishIndex = savedRatings.findIndex(dish => dish.id === dishId);
+      const isNew = dishIndex === -1;
+      
+      if (dishIndex !== -1) {
+        savedRatings[dishIndex].rating = rating;
+      } else {
+        savedRatings.push({ id: dishId, rating: rating });
       }
       localStorage.setItem('dishRatingsList', JSON.stringify(savedRatings));
+
+      // Seleccionar el mensaje según si es nueva valoración o actualización
+      const message = isNew ? newRatingMessages[rating] : changedRatingMessages[rating];
+
+      // Despachar un CustomEvent con la información de la valoración y el mensaje
+      window.dispatchEvent(new CustomEvent('dishRatingsUpdated', {
+        detail: { dishId, rating, message }
+      }));
     } catch (error) {
       console.error('Error al guardar la valoración:', error);
     }
@@ -88,36 +115,27 @@ const maxRating = 5; // Máximo de estrellas
 
   function initializeRatings() {
   try {
-    // Obtener valoraciones guardadas
     const savedRatings = JSON.parse(localStorage.getItem('dishRatingsList') || '[]');
-    console.log(savedRatings)
-    // Validar que savedRatings sea un array
+
     if (!Array.isArray(savedRatings)) {
       console.error('Los datos en localStorage no son un array:', savedRatings);
       return;
     }
 
-    // Inicializar todos los contenedores de valoración
+    const ratingsMap = new Map(savedRatings.map(dish => [dish.id, dish.rating]));
+
     document.querySelectorAll('.rating-container').forEach(container => {
       const dishId = container.dataset.dishId;
       if (!dishId) return;
 
-      // Usar valoración guardada o la predeterminada
-      let ratingToUse;
-      const dishIndex = savedRatings.findIndex(dish => dish.id === dishId);
-      if (dishIndex !== -1) {
-        // Prioridad 1: Usar la valoración guardada en localStorage
-        ratingToUse = savedRatings[dishIndex].rating; // Corregido 'ranting' -> 'rating'
-      } else {
-        // Prioridad 2: Usar la valoración predeterminada del dish
-        ratingToUse = parseInt(container.dataset.defaultRating) || 0;
-      }
+      const ratingToUse = (ratingsMap.get(dishId) ?? parseInt(container.dataset.defaultRating)) || 0;
 
-      // Actualizar visualmente
       updateStars(container, ratingToUse);
     });
+
   } catch (error) {
     console.error('Error al inicializar valoraciones:', error);
   }
 }
+
 </script>

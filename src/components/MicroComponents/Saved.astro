@@ -1,0 +1,197 @@
+---
+// Saved.astro - Componente optimizado
+const { id, title, isSaved = false } = Astro.props;
+---
+
+<div 
+  class="saved-container inline-flex items-center" 
+  data-item-id={id} 
+  data-item-title={title}
+  data-is-saved={isSaved}
+>
+  <button 
+    class="saved-button p-2 rounded-full w-[40px] h-[40px] bg-white cursor-pointer transition-colors duration-200 "
+    aria-label={isSaved ? "Eliminar de guardados" : "Guardar elemento"}
+    type="button"
+  >
+    <span class="saved-icon-outline" style={isSaved ? "display: none;" : ""}>
+      <i class="fa-regular fa-bookmark text-[var(--primary)]"></i>
+    </span>
+    <span class="saved-icon-filled" style={isSaved ? "" : "display: none;"}>
+      <i class="fa-solid fa-bookmark text-[var(--primary)]"></i>
+    </span>
+  </button>
+</div>
+
+<script>
+  interface SavedItem {
+    id: string;
+    title: string;
+    dateAdded: string;
+  }
+
+  // Mensajes para notificaciones
+  const savedMessages = {
+    added: "🎉 ¡Elemento guardado con éxito! Lo encontrarás en tu lista de favoritos.",
+    removed: "✓ Elemento eliminado de tu lista de guardados."
+  };
+
+  // Función global para manejar la inicialización y eventos
+  function setupSavedItemsHandler() {
+    // Remover cualquier evento existente para evitar duplicados
+    document.body.removeEventListener('click', handleSavedButtonClick);
+    document.body.addEventListener('click', handleSavedButtonClick);
+
+    // Inicializar estado de botones
+    initializeSavedButtonsState();
+
+    // Asegurar que los eventos estén configurados correctamente
+    window.removeEventListener('savedItemsUpdated', initializeSavedButtonsState);
+    window.addEventListener('savedItemsUpdated', initializeSavedButtonsState);
+  }
+
+  // Manejador del evento de clic delegado
+  function handleSavedButtonClick(event) {
+    const target = event.target;
+    
+    // Buscar si el clic fue en un botón o dentro de un botón de guardado
+    const savedButton = target.closest('.saved-button');
+    if (!savedButton) return;
+    
+    // Encontrar el contenedor padre que tiene los datos del elemento
+    const container = savedButton.closest('.saved-container');
+    if (!container) return;
+    
+    // Obtener los datos del elemento
+    const itemId = container.dataset.itemId;
+    const itemTitle = container.dataset.itemTitle;
+    
+    if (!itemId || !itemTitle) {
+      console.error('Datos de elemento incompletos:', itemId, itemTitle);
+      return;
+    }
+    
+    // Alternar estado de guardado
+    const currentSavedState = container.dataset.isSaved === 'true';
+    const newSavedState = !currentSavedState;
+    
+    // Actualizar la UI y almacenar en localStorage
+    toggleSavedState(container, itemId, itemTitle, newSavedState);
+  }
+
+  // Función para alternar el estado de guardado
+  function toggleSavedState(container, itemId, itemTitle, isSaved) {
+    // Actualizar UI
+    updateButtonAppearance(container, isSaved);
+    
+    // Actualizar localStorage
+    updateSavedItemsStorage(itemId, itemTitle, isSaved);
+  }
+
+  // Actualiza sólo la apariencia del botón
+  function updateButtonAppearance(container, isSaved) {
+    container.dataset.isSaved = isSaved.toString();
+    
+    const outlineIcon = container.querySelector('.saved-icon-outline');
+    const filledIcon = container.querySelector('.saved-icon-filled');
+    
+    if (outlineIcon && filledIcon) {
+      outlineIcon.style.display = isSaved ? 'none' : '';
+      filledIcon.style.display = isSaved ? '' : 'none';
+    }
+  }
+
+  // Actualiza el localStorage y emite eventos
+  function updateSavedItemsStorage(itemId, itemTitle, isSaved) {
+    try {
+      // Obtener lista actual
+      const savedItems: SavedItem[] = JSON.parse(localStorage.getItem('savedItemsList') || '[]');
+      
+      // Encuentra si el elemento ya está en la lista
+      const itemIndex = savedItems.findIndex(item => item.id === itemId);
+      let eventDetail;
+      
+      if (isSaved && itemIndex === -1) {
+        // Agregar a la lista
+        savedItems.push({ 
+          id: itemId, 
+          title: itemTitle,
+          dateAdded: new Date().toISOString()
+        });
+        
+        // Preparar datos del evento (añadido)
+        eventDetail = { 
+          itemId, 
+          itemTitle, 
+          isSaved: true, 
+          message: savedMessages.added,
+          savedCount: savedItems.length
+        };
+      } else if (!isSaved && itemIndex !== -1) {
+        // Eliminar de la lista
+        savedItems.splice(itemIndex, 1);
+        
+        // Preparar datos del evento (eliminado)
+        eventDetail = { 
+          itemId, 
+          itemTitle, 
+          isSaved: false, 
+          message: savedMessages.removed,
+          savedCount: savedItems.length
+        };
+      } else {
+        // No hay cambios, salir sin emitir evento
+        return;
+      }
+      
+      // Guardar la lista actualizada
+      localStorage.setItem('savedItemsList', JSON.stringify(savedItems));
+      
+      // Emitir un solo evento con los detalles de la operación
+      window.dispatchEvent(new CustomEvent('savedItemsUpdated', {
+        detail: eventDetail
+      }));
+      
+      console.log(`Item ${itemId} - "${itemTitle}" ${isSaved ? 'guardado' : 'eliminado de guardados'}`);
+      
+    } catch (error) {
+      console.error('Error al actualizar elementos guardados:', error);
+    }
+  }
+
+  // Inicializa el estado de todos los botones de guardar en la página
+  function initializeSavedButtonsState() {
+    try {
+      const savedItems = JSON.parse(localStorage.getItem('savedItemsList') || '[]');
+      
+      if (!Array.isArray(savedItems)) {
+        throw new Error('Formato inválido en localStorage');
+      }
+      
+      // Crear un mapa para búsqueda rápida O(1) en lugar de O(n) por cada botón
+      const savedItemsMap = new Map();
+      savedItems.forEach(item => savedItemsMap.set(item.id, true));
+      
+      // Seleccionar todos los contenedores una sola vez
+      const containers = document.querySelectorAll('.saved-container');
+      
+      // Actualizar el estado de cada botón según localStorage
+      containers.forEach(container => {
+        const itemId = container.dataset.itemId;
+        if (!itemId) return;
+        
+        const isSaved = savedItemsMap.has(itemId);
+        updateButtonAppearance(container, isSaved);
+      });
+      
+    } catch (error) {
+      console.error('Error al inicializar botones de guardado:', error);
+      // Intenta limpiar localStorage si hay un error de formato
+      localStorage.removeItem('savedItemsList');
+    }
+  }
+
+  // Configuración global para manejar eventos de navegación en Astro
+  document.addEventListener('astro:page-load', setupSavedItemsHandler);
+  document.addEventListener('astro:after-swap', setupSavedItemsHandler);
+</script>

@@ -1,0 +1,11 @@
+---
+import { dishes } from "../data/dishes"
+import Layout from "../layouts/Layout.astro"
+import RatedDishes from "../components/RatedDishes.svelte";
+import FavoritesDishes from '../components/FavoritesDishes.svelte'
+
+---
+
+<Layout>
+<FavoritesDishes  transition:persist client:load dishes={dishes} />
+</Layout>
